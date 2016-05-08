@@ -1,6 +1,6 @@
 %Predicatul bestfirst(Nod_initial,Solutie) este adevarat daca
 %Solutie este un drum (obtinut folosind strategia best-first) de
-%la nodul Nod_initial la o stare scop
+%la nodul Nod_initial la o stare scop 
 
 bestfirst(Nod_initial,Solutie):-expandeaza([],l(Nod_initial,0/0),9999999,_,da,Solutie).
 expandeaza(Drum,l(N,_),_,_, da,[N|Drum]):-scop(N).
