@@ -1,4 +1,4 @@
-% Sets of natural numbers
+% Sets of natural numbers.
 
 % Check if the element is a member in set.
 % X = element of list | L = list
