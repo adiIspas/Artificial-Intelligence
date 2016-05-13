@@ -45,3 +45,17 @@ interclaseaza([X|L],[Y|R],[Y|LR]) :- X > Y, interclaseaza([X|L],R,LR).
 mergesort([],[]).
 mergesort([X],[X]).
 mergesort(L,SL) :- imparte(L,L1,L2), mergesort(L1,LS), mergesort(L2,LR), interclaseaza(LS,LR,SL).
+
+% Insert an element into a ordered list.
+% E, X = element | L, LR = lists
+inserare([],E,[E]).
+inserare([X|L],E,[E,X|L]) :- E =< X.
+inserare([X|L],E,[X|LR]) :- E > X, inserare(L,E,LR).
+
+% Divide a list into two lists by an element.
+% E, X = elements | L,L1,L2 = lists
+divide([],_,[],[]).
+divide([X],E,[X],[]) :- X =< E.
+divide([X],E,[],[X]) :- X > E.
+divide([X|L],E,[X|L1],L2) :- X =< E, divide(L,E,L1,L2).
+divide([X|L],E,L1,[X|L2]) :- X > E, divide(L,E,L1,L2).
