@@ -37,21 +37,36 @@ concatenare([],L,L).
 concatenare([X|L1],L,[X|L2]) :- concatenare(L1,L,L2).
 
 % Get list of leaves from a tree.
-% R = root | S = left tree | R = right tree | L = list of leaves | L1, L2 = temporarily lists.
+% R = root | S = left tree | D = right tree | L = list of leaves | L1, L2 = temporarily lists.
 lista_frunze(nil,[]).
 lista_frunze(t(nil,R,nil),[R]).
 lista_frunze(t(S,_,D),L) :- lista_frunze(S,L1), lista_frunze(D,L2), concatenare(L1,L2,L).
 
 % Get list of internal nodes from a tree.
-% R = root | S = left tree | R = right tree | L = list of internal nodes | L1, L2 = temporarily lists.
+% R = root | S = left tree | D = right tree | L = list of internal nodes | L1, L2 = temporarily lists.
 lista_noduri_interne(nil,[]).
 lista_noduri_interne(t(nil,_,nil),[]).
 lista_noduri_interne(t(S,R,D),[R|L]) :- lista_noduri_interne(S,L1), lista_noduri_interne(D,L2), concatenare(L1,L2,L).
 
 % Get list of edges from a tree.
-% R = root | S = left tree | R = right tree | L = list of edges | L1, L2 = temporarily lists.
+% R = root | S = left tree | D = right tree | L = list of edges | L1, L2 = temporarily lists.
 lista_muchii(nil,[]).
 lista_muchii(t(nil,_,nil),[]).
 lista_muchii(t(t(S1,S,D1),R,nil),[R-S|L]) :- lista_muchii(t(S1,S,D1),L).
 lista_muchii(t(t(nil,R,t(S2,D,D2))),[R-D|L]) :- lista_muchii(t(S2,D,D2),L).
 lista_muchii(t(t(S1,S,D1),R,t(S2,D,D2)),[R-S,R-D|L]) :- lista_muchii(t(S1,S,D1),L1),  lista_muchii(t(S2,D,D2),L2), concatenare(L1,L2,L).
+
+% Looking for the lowest element from a tree and delete.
+% E = element | R = root | S = left tree | D = right tree | S1 = temporarily tree
+cauta(E,t(nil,E,D),D).
+cauta(E,t(S,R,D),t(S1,R,D)) :- cauta(E,S,S1).
+
+% Delete a node from a tree.
+% E = element | R = root | S = left tree | D = right tree | S1,D1 = temporarily tree
+sterge(_,nil,nil).
+sterge(E,t(nil,E,nil),nil).
+sterge(E,t(nil,E,D),D).
+sterge(E,t(S,E,nil),S).
+sterge(R,t(S,R,D),t(S,R1,DD)) :- cauta(R1,D,DD).
+sterge(E,t(S,R,D),t(S1,R,D)) :- E < R, sterge(E,S,S1).
+sterge(E,t(S,R,D),t(S,R,D1)) :- E > R, sterge(E,D,D1).
